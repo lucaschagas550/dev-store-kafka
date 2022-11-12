@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -9,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DevStore.Core.Http
 {
+    //Interface para utilizar Http para o kafka
     public interface IRestClient
     {
         Task<TResult> PostAsync<T, TResult>(T @event, string token = null);
@@ -36,7 +34,7 @@ namespace DevStore.Core.Http
                 Content = content
             };
 
-            if(!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrEmpty(token))
             {
                 httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
@@ -46,7 +44,7 @@ namespace DevStore.Core.Http
             var response = await responseMessage.Content.ReadAsStringAsync();
 
 
-            var result =  JsonSerializer.Deserialize<TResult>(response, _options);
+            var result = JsonSerializer.Deserialize<TResult>(response, _options);
 
             return result;
         }
@@ -56,7 +54,7 @@ namespace DevStore.Core.Http
             IgnoreReadOnlyProperties = true,
             IgnoreReadOnlyFields = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true, 
+            PropertyNameCaseInsensitive = true,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
         };
     }
